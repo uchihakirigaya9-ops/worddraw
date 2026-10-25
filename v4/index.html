@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wordprint – portraits made of words</title>
+  <!-- Optional hand-drawn fonts. Offline, the app falls back to system handwriting fonts. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>Wordprint</h1>
+    <p>Turn a portrait into a picture made entirely of words.</p>
+  </header>
+
+  <main class="layout">
+    <!-- ================= Controls ================= -->
+    <form id="controls" class="panel" autocomplete="off" onsubmit="return false">
+      <section>
+        <h2>Photo</h2>
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" />
+          <strong>Choose a photo</strong>
+          <span>or drop a JPG, PNG or WEBP here</span>
+        </label>
+        <div class="row">
+          <label class="field">Crop shape
+            <select id="aspect">
+              <option value="3:4" selected>Portrait 3:4</option>
+              <option value="4:5">Portrait 4:5</option>
+              <option value="2:3">Tall 2:3</option>
+              <option value="1:1">Square 1:1</option>
+            </select>
+          </label>
+        </div>
+        <label class="range"><span>Zoom <output></output></span>
+          <input type="range" id="zoom" min="40" max="500" value="100" data-unit="%" />
+        </label>
+        <p class="hint">Drag the photo to position it. Scroll or use Zoom to resize.</p>
+      </section>
+
+      <section>
+        <h2>Words</h2>
+        <label class="field">Main name
+          <input type="text" id="name" class="big" maxlength="40" placeholder="NUTTED" />
+        </label>
+        <label class="field">Other words, hobbies or phrases
+          <textarea id="words" rows="3" maxlength="600" placeholder="Separate with commas or new lines: football, coffee, big smile"></textarea>
+        </label>
+      </section>
+
+      <section>
+        <h2>Style</h2>
+        <label class="field">Font
+          <select id="font">
+            <option value="caveat" selected>Handwriting</option>
+            <option value="marker">Marker</option>
+            <option value="typewriter">Typewriter</option>
+            <option value="sans">Heavy sans</option>
+            <option value="serif">Serif</option>
+          </select>
+        </label>
+        <fieldset class="modes">
+          <legend>Colour mode</legend>
+          <label><input type="radio" name="mode" value="bw" checked /> Black and white</label>
+          <label><input type="radio" name="mode" value="color" /> Colour</label>
+        </fieldset>
+        <div class="row">
+          <label class="field">Ink <input type="color" id="ink" value="#111111" /></label>
+          <label class="field">Background <input type="color" id="bg" value="#ffffff" /></label>
+        </div>
+        <label class="range"><span>Text density <output></output></span>
+          <input type="range" id="density" min="40" max="240" value="120" data-unit="%" /></label>
+        <label class="range"><span>Font size <output></output></span>
+          <input type="range" id="size" min="5" max="28" value="9" data-unit="" /></label>
+        <label class="range"><span>Portrait contrast <output></output></span>
+          <input type="range" id="contrast" min="-50" max="100" value="25" data-unit="" /></label>
+        <label class="range"><span>Facial detail and edges <output></output></span>
+          <input type="range" id="detail" min="0" max="100" value="50" data-unit="%" /></label>
+        <label class="range"><span>Hair and shadow darkness <output></output></span>
+          <input type="range" id="dark" min="0" max="100" value="70" data-unit="" /></label>
+        <label class="range"><span>Word rotation (random tilt) <output></output></span>
+          <input type="range" id="tilt" min="0" max="90" value="12" data-unit="°" /></label>
+        <label class="range"><span>Follow facial contours <output></output></span>
+          <input type="range" id="follow" min="0" max="100" value="75" data-unit="%" /></label>
+        <label class="range"><span>Word spacing <output></output></span>
+          <input type="range" id="spacing" min="0" max="100" value="35" data-unit="" /></label>
+      </section>
+
+      <section>
+        <h2>Silhouette</h2>
+        <label class="field">Shape of the portrait
+          <select id="maskMode">
+            <option value="auto" selected>Cut out the subject (smart)</option>
+            <option value="simple">Plain background only</option>
+            <option value="oval">Oval</option>
+            <option value="full">Whole frame</option>
+          </select>
+        </label>
+        <label class="range"><span>Background cut-off <output></output></span>
+          <input type="range" id="cut" min="0" max="100" value="50" data-unit="" /></label>
+        <label class="range"><span>Include hair and soft edges <output></output></span>
+          <input type="range" id="hair" min="0" max="100" value="60" data-unit="" /></label>
+        <label class="check"><input type="checkbox" id="showMask" checked /> Show the cut-out on the original (red = left blank)</label>
+        <fieldset class="modes tools">
+          <legend>Touch up the cut-out</legend>
+          <label><input type="radio" name="tool" value="pan" checked /> Move photo</label>
+          <label><input type="radio" name="tool" value="keep" /> Keep (green)</label>
+          <label><input type="radio" name="tool" value="erase" /> Erase (red)</label>
+        </fieldset>
+        <label class="range"><span>Brush size <output></output></span>
+          <input type="range" id="brushSize" min="6" max="90" value="30" data-unit="" /></label>
+        <button type="button" id="clearPaint" class="quiet small">Clear brush marks</button>
+        <p class="hint">Position and zoom the photo first, then paint. Paint green over anything missing and red over anything that should stay blank. Marks always override the automatic cut-out. Raise Include hair to catch more of the hair outline.</p>
+      </section>
+
+      <section>
+        <h2>Output</h2>
+        <label class="field">Download size
+          <select id="outW">
+            <option value="1200" selected>Standard (1200 px wide)</option>
+            <option value="1800">Large (1800 px wide)</option>
+            <option value="2400">High-res (2400 px wide)</option>
+            <option value="3000">Print (3000 px wide)</option>
+          </select>
+        </label>
+        <div class="actions">
+          <button type="button" id="generate" class="primary" disabled>Generate portrait</button>
+          <button type="button" id="regen" disabled>Regenerate</button>
+          <button type="button" id="download" disabled>Download PNG</button>
+          <button type="button" id="reset" class="quiet">Reset</button>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite">Ready. Upload a photo to begin.</p>
+      </section>
+    </form>
+
+    <!-- ================= Stage ================= -->
+    <section class="stage">
+      <figure class="view">
+        <figcaption>Original photo</figcaption>
+        <canvas id="crop" aria-label="Photo crop area"></canvas>
+      </figure>
+      <figure class="view">
+        <figcaption>Word portrait</figcaption>
+        <div class="empty" id="empty">Your portrait will appear here.</div>
+        <canvas id="out" hidden aria-label="Generated word-art portrait"></canvas>
+      </figure>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
